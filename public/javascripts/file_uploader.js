@@ -1,7 +1,7 @@
 var proneo = {};
 
 proneo.log = function(msg) {
-   $("#proneo_log_content").append(msg);
+   $("#proneo_log_content").append(msg + "<br>");
    console.log(msg);
 };
 
@@ -20,10 +20,10 @@ function process_drop(evt) {
   console.log(files);
   
   for (var i = 0, f; file = files[i]; i++) {
-    var msg = "<p>File information: <strong>" + file.name +
-      "</strong> type: <strong>" + file.type +
-      "</strong> size: <strong>" + file.size +
-      "</strong> bytes</p>";
+    var msg = "File information: " + file.name +
+      "<br>type:" + file.type +
+      "<br>size:" + file.size +
+      "bytes";
     proneo.log(msg);
     var file_info = 'Type:' + file.type + ',Size:' + file.size;
     var div_content = '<div class="file ' + i + '" title="' + file_info + '">' + 
