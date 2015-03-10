@@ -1,52 +1,51 @@
-var all_files = [],
-      current_file_id = 0,
-      locked = false,
-      prev_count_files = 0,
-      waiting = 0,
-      drop, dropzone, handleNextFile, handleReaderLoad, noopHandler;
-      
-function stop_default_actions(){
+var proneo = {};
+
+proneo.log = function(msg) {
+   $("#proneo_log_content").append(msg);
+   console.log(msg);
+};
+
+
+function event_arrestor(evt) {
+  console.log( "%s started", evt.type);
   evt.stopPropagation();
   evt.preventDefault();
 }
 
-function drop(evt) {
-  stop_default_actions(evt);
-
+function process_drop(evt) {
+  event_arrestor(evt);
   var files = evt.dataTransfer.files;
   var count = files.length;
-  var i, j;
-
-  if ( count > 0 ) {
-    prev_count_files = all_files.length;
-
-    if ( $("#dropzoneLabel").length !== 0 ) {
-        $("#dropzone").html('');
-    }
-
-    for ( i = prev_count_files + waiting, j = 0; i < prev_count_files + files.length + waiting; i++, j++ ) {
-        $("#dropzone").append('<div class="file ' + i + '"><div class="name">' + files[j].name + '</div><div class="progress">Waiting...</div></div>');
-    }
-
-    waiting += count;
-
-    if ( ! locked ) {
-        waiting -= count;
-        all_files.push.apply(all_files, files);
-        //handleNextFile();
-    }
+  console.log(count + " files were dropped");
+  console.log(files);
+  
+  for (var i = 0, f; file = files[i]; i++) {
+    var msg = "<p>File information: <strong>" + file.name +
+      "</strong> type: <strong>" + file.type +
+      "</strong> size: <strong>" + file.size +
+      "</strong> bytes</p>";
+    proneo.log(msg);
+    var file_info = 'Type:' + file.type + ',Size:' + file.size;
+    var div_content = '<div class="file ' + i + '" title="' + file_info + '">' + 
+                      '<div class="name">' + file.name + '</div>' + 
+                      '</div>';    
+    $("#activefiles").append(div_content);
   }
-};
+}
 
-(function($, window) {
-  "use strict";
-  var document = window.document;
-    
-  $(document).ready(function(){
-    dropzone = document.getElementById("dropzone");
-    dropzone.addEventListener("dragenter", stop_default_actions, false);
-    dropzone.addEventListener("dragexit", stop_default_actions, false);
-    dropzone.addEventListener("dragover", stop_default_actions, false);
-    dropzone.addEventListener("drop", drop, false); 
+$(document).ready(function() {
+  var dropzone = document.getElementsByTagName('body')[0];
+  dropzone.addEventListener('dragenter', event_arrestor, false);
+  dropzone.addEventListener('dragover', event_arrestor, false);
+  dropzone.addEventListener('dragexit', event_arrestor, false);
+  dropzone.addEventListener('dragleave', event_arrestor, false);
+  dropzone.addEventListener('drop', process_drop, false);
+  
+  proneo.log("it started");
+  
+  $('#clear_log').on("click", function(){
+    console.log("ProNeo clear log");
+    $('#proneo_log_content').empty();
   });
-)(jQuery, window));
+ 
+});

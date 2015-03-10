@@ -4,50 +4,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>File Uploader</title>
     <script src="javascripts/libs/jquery/jquery-1.8.2.min.js"></script>
+    <script src="javascripts/file_uploader.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/file_uploader.css">
-<script>
-
-function event_arrestor(evt) {
-  console.log( "%s started", evt.type);
-  evt.stopPropagation();
-  evt.preventDefault();
-}
-
-function process_drop(evt) {
-  event_arrestor(evt);
-  var files = evt.dataTransfer.files;
-  var count = files.length;
-  console.log(count + " files were dropped");
-  console.log(files);
-  
-  for (var i = 0, f; file = files[i]; i++) {
-    var msg = "<p>File information: <strong>" + file.name +
-      "</strong> type: <strong>" + file.type +
-      "</strong> size: <strong>" + file.size +
-      "</strong> bytes</p>";
-    console.log(msg);
-    var file_info = 'Type:' + file.type + ',Size:' + file.size;
-    var div_content = '<div class="file ' + i + '" title="' + file_info + '">' + 
-                      '<div class="name">' + file.name + '</div>' + 
-                      '</div>';    
-    $("#activefiles").append(div_content);
-  }
-}
-
-$(document).ready(function() {
-  var dropzone = document.getElementsByTagName('body')[0];
-  dropzone.addEventListener('dragenter', event_arrestor, false);
-  dropzone.addEventListener('dragover', event_arrestor, false);
-  dropzone.addEventListener('dragexit', event_arrestor, false);
-  dropzone.addEventListener('dragleave', event_arrestor, false);
-  dropzone.addEventListener('drop', process_drop, false);
- 
-});
-</script>
-    
   </head>
   <body>
     <div id="activefiles"><span id="files_watermark" class="files_watermark">Active Files</span></div>
-    <span id="drop_watermark" class="watermark">Drag &amp; Drop</span>
+    <div id="proneo_log">
+      <span id="clear_log">Clear</span><br>
+      <span id="proneo_log_content" class="logs">...</span>
+    </div>
+    <span id="drop_watermark" class="drop_and_drag_watermark">Drag &amp; Drop</span>
   </body>
 </html>
